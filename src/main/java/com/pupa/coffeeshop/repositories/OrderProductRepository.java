@@ -12,5 +12,6 @@ import com.pupa.coffeeshop.domain.OrderProduct;
 
 @Repository
 public interface OrderProductRepository extends JpaRepository<OrderProduct, Integer> {
-	public List<OrderProduct> findByOrder(int id);
+	
+	List<OrderProduct> findByOrderId(int id);
 }

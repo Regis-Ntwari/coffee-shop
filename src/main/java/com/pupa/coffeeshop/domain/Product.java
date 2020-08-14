@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Product implements Serializable{
 	
@@ -29,6 +31,7 @@ public class Product implements Serializable{
 	private Category category = new Category();
 	
 	@OneToMany(mappedBy = "product")
+	@JsonIgnore
 	private List<OrderProduct> orderProducts = new ArrayList<>();
 	
 	public List<OrderProduct> getOrderProducts() {

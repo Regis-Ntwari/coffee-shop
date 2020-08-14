@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "orders")
 public class Order implements Serializable{
@@ -28,6 +30,7 @@ public class Order implements Serializable{
 	@ManyToOne
 	private User user;
 	@OneToMany(mappedBy = "order")
+	@JsonIgnore
 	private List<OrderProduct> orderProducts = new ArrayList<>();
 	public int getId() {
 		return id;

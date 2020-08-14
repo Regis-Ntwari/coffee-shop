@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,9 @@ import com.pupa.coffeeshop.services.UserService;
 public class AppController {
 	
 	@Autowired
+	private OrderService orderService;
+	
+	@Autowired
 	private OrderProductService orderProductService;
 	@Autowired
 	private UserService userService;
@@ -44,6 +48,13 @@ public class AppController {
 	@Autowired
 	private ProductService productService;
 	
+	
+	public OrderService getOrderService() {
+		return orderService;
+	}
+	public void setOrderService(OrderService orderService) {
+		this.orderService = orderService;
+	}
 	public OrderProductService getOrderProductService() {
 		return orderProductService;
 	}
@@ -85,18 +96,6 @@ public class AppController {
 	public Category oneCategory(@PathVariable int id) {
 		return this.categoryService.getOneCategory(id);
 	}
-	
-	//file upload
-//	@PostMapping("/file")
-//	public void addFile(@RequestBody MultipartFile multipartFile) {
-//		File fileToSave = new File("/home/regis/images/" + multipartFile.getOriginalFilename());
-//		try {
-//			multipartFile.transferTo(fileToSave);
-//		} catch (IllegalStateException | IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
 	
 	//product API
 	@PostMapping("/product")
@@ -159,5 +158,13 @@ public class AppController {
 		}
 		orderProductService.addOrderProduct(trans);
 		return trans;
+	}
+	@GetMapping("/orders")
+	public List<Order> allOrder(){
+		return orderService.allOrders();
+	}
+	@GetMapping("/order/{id}")
+	public List<OrderProduct> getOneOrder(@PathVariable("id") int id) {
+		return orderProductService.allOrdersProduct(id);
 	}
 }
