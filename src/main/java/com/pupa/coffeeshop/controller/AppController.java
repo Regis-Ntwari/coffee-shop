@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +35,7 @@ import com.pupa.coffeeshop.services.UserService;
 @CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
 public class AppController {
 	
+	private final String UPLOAD_DIR="/home/regis/images/";
 	@Autowired
 	private OrderService orderService;
 	
@@ -99,15 +99,16 @@ public class AppController {
 	
 	//product API
 	@PostMapping("/product")
-	public Product addProduct(@RequestParam MultipartFile multipartFile,
+	public Product addProduct(@RequestParam MultipartFile file,
 								@RequestParam String name,
 								@RequestParam int catId,
 								@RequestParam double price) {
-		System.out.println("hey there");
+		System.out.println(catId);
 		System.out.println(name + " " + catId + " " + price);
-		File fileToSave = new File("/home/regis/images/" + name + ".jpg");
+		String filename = UPLOAD_DIR + name + ".jpg";
+		File fileToSave = new File(filename);
 		try {
-			multipartFile.transferTo(fileToSave);
+			file.transferTo(fileToSave);
 		} catch (IllegalStateException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -116,7 +117,7 @@ public class AppController {
 		pr.setCategory(new Category(catId));
 		pr.setName(name);
 		pr.setPrice(price);
-		pr.setPhoto(name + ".jpg");
+		pr.setPhoto("/images/" + name + ".jpg");
 		return this.productService.addProduct(pr);
 	}
 	@PutMapping("/product")
@@ -149,12 +150,12 @@ public class AppController {
 		return this.productService.getOneProduct(id).get();
 	}
 	@PostMapping("/order")
-	public List<OrderProduct> saveOrder(@RequestBody List<OrderHelper> oh){
+	public List<OrderProduct> saveOrder(@RequestBody List<OrderHelper> productSelected){
 		List<OrderProduct> trans = new ArrayList<>();
 		Order o = new Order();
 		o.setDate(Date.valueOf(LocalDate.now()));
-		for(OrderHelper ot : oh) {
-			trans.add(new OrderProduct(o, productService.getOneProduct(ot.getProductId()).get(), ot.getQuantity()));
+		for(OrderHelper ot : productSelected) {
+			trans.add(new OrderProduct(o, ot.getP(), ot.getQuantity()));
 		}
 		orderProductService.addOrderProduct(trans);
 		return trans;

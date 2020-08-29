@@ -1,13 +1,15 @@
 package com.pupa.coffeeshop.domain;
 
 public class OrderHelper {
-	private int productId;
+	private Product p;
 	private int quantity;
-	public int getProductId() {
-		return productId;
+	
+	
+	public Product getP() {
+		return p;
 	}
-	public void setProductId(int productId) {
-		this.productId = productId;
+	public void setP(Product p) {
+		this.p = p;
 	}
 	public int getQuantity() {
 		return quantity;
